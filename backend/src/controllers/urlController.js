@@ -1,8 +1,13 @@
 const Url = require("../models/Url");
+const Analytics = require("../models/Analytics");
+
 const generateShortCode = require("../utils/generateShortCode");
 const QRCode = require("qrcode");
 const redis = require("../config/redis");
 const { analyzeURL } = require("../ai/aiService");
+
+const UAParser = require("ua-parser-js");
+const geoip = require("geoip-lite");
 
 // ===============================
 // Create Short URL
@@ -39,8 +44,9 @@ exports.createShortUrl = async (req, res) => {
 
         // Custom Alias
         if (customAlias && customAlias.trim() !== "") {
+
             const exists = await Url.findOne({
-                shortCode: customAlias
+                shortCode: customAlias.trim()
             });
 
             if (exists) {
@@ -51,8 +57,11 @@ exports.createShortUrl = async (req, res) => {
             }
 
             shortCode = customAlias.trim();
+
         } else {
+
             shortCode = generateShortCode();
+
         }
 
         // AI Analysis
@@ -82,7 +91,7 @@ exports.createShortUrl = async (req, res) => {
             phishingStatus: aiResult.phishingStatus
         });
 
-        // Cache in Redis
+        // Store in Redis
         await redis.set(shortCode, originalUrl);
 
         res.status(201).json({
@@ -92,12 +101,14 @@ exports.createShortUrl = async (req, res) => {
         });
 
     } catch (err) {
+
         console.error(err);
 
         res.status(500).json({
             success: false,
             message: err.message
         });
+
     }
 };
 
@@ -105,117 +116,214 @@ exports.createShortUrl = async (req, res) => {
 // Redirect URL
 // ===============================
 exports.redirectUrl = async (req, res) => {
-    try {
-        const { code } = req.params;
+    console.log("Redirect route called");
 
-        // Check Redis first
+    try {
+
+        const { code } = req.params;
+        console.log("Short code:", code);
+
         let originalUrl = await redis.get(code);
 
-        if (originalUrl) {
-            await Url.findOneAndUpdate(
-                { shortCode: code },
-                { $inc: { clicks: 1 } }
-            );
+        let url;
 
-            return res.redirect(originalUrl);
+        // -------------------------
+        // Redis Hit
+        // -------------------------
+        if (originalUrl) {
+
+            url = await Url.findOne({
+                shortCode: code,
+                isActive: true
+            });
+
         }
 
-        // Fetch from MongoDB
-        const url = await Url.findOne({
-            shortCode: code,
-            isActive: true
-        });
+        // -------------------------
+        // Redis Miss
+        // -------------------------
+        else {
+
+            url = await Url.findOne({
+                shortCode: code,
+                isActive: true
+            });
+
+            if (!url) {
+
+                return res.status(404).json({
+                    success: false,
+                    message: "URL not found."
+                });
+
+            }
+
+            originalUrl = url.originalUrl;
+
+            await redis.set(code, originalUrl);
+
+        }
 
         if (!url) {
+
             return res.status(404).json({
                 success: false,
                 message: "URL not found."
             });
+
         }
 
-        // Save in Redis
-        await redis.set(code, url.originalUrl);
-
-        // Increase click count
+        // Increment Click Count
         url.clicks += 1;
         await url.save();
+        console.log("Click updated:", url.clicks);
 
-        res.redirect(url.originalUrl);
+        // User Agent
+        const parser = new UAParser(req.headers["user-agent"]);
+
+        const result = parser.getResult();
+
+        // IP Address
+        const ip =
+            req.headers["x-forwarded-for"] ||
+            req.socket.remoteAddress;
+
+        // Geo Location
+        const geo = geoip.lookup(ip);
+
+        // Save Analytics
+        await Analytics.create({
+            //console.log("Analytics saved successfully");
+
+            url: url._id,
+
+            ip,
+
+            browser: result.browser.name || "Unknown",
+
+            os: result.os.name || "Unknown",
+
+            device: result.device.type || "Desktop",
+
+            country: geo?.country || "Unknown",
+
+            city: geo?.city || "Unknown",
+
+            referrer: req.headers.referer || "Direct"
+
+        });
+
+        return res.redirect(originalUrl);
 
     } catch (err) {
+
         console.error(err);
 
         res.status(500).json({
             success: false,
             message: err.message
         });
+
     }
+
 };
 
 // ===============================
 // Get Logged-in User URLs
 // ===============================
 exports.getMyUrls = async (req, res) => {
+
     try {
+
         const urls = await Url.find({
             user: req.user.id
-        }).sort({ createdAt: -1 });
+        }).sort({
+            createdAt: -1
+        });
 
         res.status(200).json({
+
             success: true,
+
             count: urls.length,
+
             data: urls
+
         });
 
     } catch (err) {
+
         console.error(err);
 
         res.status(500).json({
+
             success: false,
+
             message: err.message
+
         });
+
     }
+
 };
 
 // ===============================
 // Delete URL
 // ===============================
 exports.deleteUrl = async (req, res) => {
+
     try {
+
         const url = await Url.findById(req.params.id);
 
         if (!url) {
+
             return res.status(404).json({
+
                 success: false,
+
                 message: "URL not found."
+
             });
+
         }
 
-        // Owner check
         if (url.user.toString() !== req.user.id) {
+
             return res.status(403).json({
+
                 success: false,
+
                 message: "Unauthorized."
+
             });
+
         }
 
-        // Remove Redis cache
         await redis.del(url.shortCode);
 
-        // Delete from MongoDB
         await url.deleteOne();
 
         res.status(200).json({
+
             success: true,
+
             message: "URL deleted successfully."
+
         });
 
     } catch (err) {
+
         console.error(err);
 
         res.status(500).json({
+
             success: false,
+
             message: err.message
+
         });
+
     }
+
 };

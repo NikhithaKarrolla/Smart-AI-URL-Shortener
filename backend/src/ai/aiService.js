@@ -1,10 +1,12 @@
+require("dotenv").config();
+
 const { GoogleGenAI } = require("@google/genai");
 
-console.log("GEMINI_API_KEY:", process.env.GEMINI_API_KEY);
+console.log("Loaded API Key:", process.env.GEMINI_API_KEY);
+
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
 });
-
 const cleanResponse = (text) => {
     return text
         .replace(/```json/g, "")
@@ -87,7 +89,8 @@ Return ONLY JSON.
             return JSON.parse(text);
         }
     } catch (error) {
-        console.error("AI Service Error:", error.message);
+        console.error("AI Service Error:");
+        console.error(error);
 
         return fallbackResponse;
     }
