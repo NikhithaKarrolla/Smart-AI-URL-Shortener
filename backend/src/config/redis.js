@@ -6,8 +6,12 @@ redis.on("connect", () => {
     console.log("✅ Redis Connected");
 });
 
+redis.on("ready", () => {
+    console.log("✅ Redis Ready");
+});
+
 redis.on("error", (err) => {
-    console.log("❌ Redis Error:", err.message);
+    console.error("❌ Redis Error:", err);
 });
 
 module.exports = redis;
