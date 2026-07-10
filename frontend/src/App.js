@@ -67,6 +67,14 @@ function App() {
                     </ProtectedRoute>
                 }
             />
+            <Route
+    path="/admin"
+    element={
+        <ProtectedRoute adminOnly={true}>
+            <AdminDashboard />
+        </ProtectedRoute>
+    }
+/>
 
             <Route
                 path="*"

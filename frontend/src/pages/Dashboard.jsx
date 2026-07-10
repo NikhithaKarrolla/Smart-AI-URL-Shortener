@@ -13,23 +13,23 @@ import UrlTable from "../components/dashboard/UrlTable";
 const Dashboard = () => {
 
     const [urls, setUrls] = useState([]);
-
-    const [stats, setStats] = useState({
-
-        totalUrls: 0,
-
-        totalClicks: 0,
-
-        safeUrls: 0,
-
-        blockedUrls: 0
-
-    });
-
     const [loading, setLoading] = useState(true);
 
+    const [search, setSearch] = useState("");
+    const [statusFilter, setStatusFilter] = useState("All");
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 5;
+
+    const [stats, setStats] = useState({
+        totalUrls: 0,
+        totalClicks: 0,
+        safeUrls: 0,
+        blockedUrls: 0
+    });
+
     // ==============================
-    // Load Dashboard Data
+    // Load Dashboard
     // ==============================
 
     const loadDashboard = async () => {
@@ -51,15 +51,11 @@ const Dashboard = () => {
                 totalClicks: analyticsRes.data.summary.totalClicks,
 
                 safeUrls: urlList.filter(
-
                     url => url.phishingStatus === "Safe"
-
                 ).length,
 
                 blockedUrls: urlList.filter(
-
                     url => !url.isActive
-
                 ).length
 
             });
@@ -68,9 +64,9 @@ const Dashboard = () => {
 
         catch (err) {
 
-            toast.error("Failed to load dashboard");
-
             console.log(err);
+
+            toast.error("Failed to load dashboard");
 
         }
 
@@ -110,7 +106,7 @@ const Dashboard = () => {
 
                 err.response?.data?.message ||
 
-                "Failed"
+                "Failed to create URL"
 
             );
 
@@ -138,7 +134,7 @@ const Dashboard = () => {
 
         }
 
-        catch (err) {
+        catch {
 
             toast.error("Delete Failed");
 
@@ -146,9 +142,63 @@ const Dashboard = () => {
 
     };
 
-    if (loading)
+    // ==============================
+    // Search + Filter
+    // ==============================
 
-        return <h2 className="text-center mt-5">Loading...</h2>;
+    const filteredUrls = urls.filter((url) => {
+
+        const matchSearch =
+
+            url.originalUrl
+                .toLowerCase()
+                .includes(search.toLowerCase())
+
+            ||
+
+            url.shortCode
+                .toLowerCase()
+                .includes(search.toLowerCase());
+
+        const matchStatus =
+
+            statusFilter === "All"
+
+            ||
+
+            url.phishingStatus === statusFilter;
+
+        return matchSearch && matchStatus;
+
+    });
+
+    // ==============================
+    // Pagination
+    // ==============================
+
+    const totalPages = Math.ceil(filteredUrls.length / rowsPerPage);
+
+    const paginatedUrls = filteredUrls.slice(
+
+        (currentPage - 1) * rowsPerPage,
+
+        currentPage * rowsPerPage
+
+    );
+
+    if (loading) {
+
+        return (
+
+            <h2 className="text-center mt-5">
+
+                Loading...
+
+            </h2>
+
+        );
+
+    }
 
     return (
 
@@ -157,44 +207,127 @@ const Dashboard = () => {
             <Sidebar />
 
             <div
-
                 className="flex-grow-1"
-
                 style={{
-
                     marginLeft: "250px",
-
                     background: "#f5f7fb",
-
                     minHeight: "100vh"
-
                 }}
-
             >
 
                 <Navbar />
 
-                <div className="container">
+                <div className="container py-4">
 
-                    <DashboardStats
+                    <DashboardStats stats={stats} />
 
-                        stats={stats}
+                    <CreateUrlForm createUrl={createUrl} />
 
-                    />
+                    {/* Search + Filter */}
 
-                    <CreateUrlForm
+                    <div className="card shadow mb-4">
 
-                        createUrl={createUrl}
+                        <div className="card-body">
 
-                    />
+                            <div className="row">
+
+                                <div className="col-md-8">
+
+                                    <input
+                                        className="form-control"
+                                        placeholder="Search Original URL or Short Code..."
+                                        value={search}
+                                        onChange={(e) => {
+
+                                            setSearch(e.target.value);
+
+                                            setCurrentPage(1);
+
+                                        }}
+                                    />
+
+                                </div>
+
+                                <div className="col-md-4">
+
+                                    <select
+                                        className="form-select"
+                                        value={statusFilter}
+                                        onChange={(e) => {
+
+                                            setStatusFilter(e.target.value);
+
+                                            setCurrentPage(1);
+
+                                        }}
+                                    >
+
+                                        <option>All</option>
+
+                                        <option>Safe</option>
+
+                                        <option>Unknown</option>
+
+                                        <option>Malicious</option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {/* URL Table */}
 
                     <UrlTable
 
-                        urls={urls}
+                        urls={paginatedUrls}
 
                         deleteUrl={deleteUrl}
 
                     />
+
+                    {/* Pagination */}
+
+                    <div className="d-flex justify-content-center align-items-center mt-4">
+
+                        <button
+                            className="btn btn-secondary me-3"
+                            disabled={currentPage === 1}
+                            onClick={() =>
+                                setCurrentPage(currentPage - 1)
+                            }
+                        >
+
+                            Previous
+
+                        </button>
+
+                        <span>
+
+                            Page {currentPage} of {totalPages || 1}
+
+                        </span>
+
+                        <button
+                            className="btn btn-secondary ms-3"
+                            disabled={
+                                currentPage === totalPages ||
+                                totalPages === 0
+                            }
+                            onClick={() =>
+                                setCurrentPage(currentPage + 1)
+                            }
+                        >
+
+                            Next
+
+                        </button>
+
+                    </div>
 
                 </div>
 

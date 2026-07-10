@@ -19,13 +19,17 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
     };
 
-    const logout = () => {
+   const logout = () => {
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+    localStorage.removeItem("token");
 
-        setUser(null);
-    };
+    localStorage.removeItem("user");
+
+    setUser(null);
+
+    window.location.href = "/login";
+
+};
 
     return (
 
@@ -45,5 +49,7 @@ export const AuthProvider = ({ children }) => {
     );
 
 };
+
+
 
 export const useAuth = () => useContext(AuthContext);

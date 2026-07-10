@@ -1,56 +1,94 @@
 const DashboardStats = ({ stats }) => {
 
-    return (
+    const cards=[
+
+        {
+
+            title:"URLs",
+
+            value:stats.totalUrls,
+
+            color:"primary"
+
+        },
+
+        {
+
+            title:"Clicks",
+
+            value:stats.totalClicks,
+
+            color:"success"
+
+        },
+
+        {
+
+            title:"Safe URLs",
+
+            value:stats.safeUrls,
+
+            color:"info"
+
+        },
+
+        {
+
+            title:"Blocked",
+
+            value:stats.blockedUrls,
+
+            color:"danger"
+
+        }
+
+    ];
+
+    return(
 
         <div className="row mb-4">
 
-            <div className="col-md-3">
+            {
 
-                <div className="card shadow p-3">
+                cards.map(card=>(
 
-                    <h5>Total URLs</h5>
+                    <div
 
-                    <h2>{stats.totalUrls}</h2>
+                        className="col-md-3"
 
-                </div>
+                        key={card.title}
 
-            </div>
+                    >
 
-            <div className="col-md-3">
+                        <div
 
-                <div className="card shadow p-3">
+                            className={`card border-0 shadow bg-${card.color} text-white`}
 
-                    <h5>Total Clicks</h5>
+                        >
 
-                    <h2>{stats.totalClicks}</h2>
+                            <div className="card-body">
 
-                </div>
+                                <h6>
 
-            </div>
+                                    {card.title}
 
-            <div className="col-md-3">
+                                </h6>
 
-                <div className="card shadow p-3">
+                                <h2>
 
-                    <h5>Safe URLs</h5>
+                                    {card.value}
 
-                    <h2>{stats.safeUrls}</h2>
+                                </h2>
 
-                </div>
+                            </div>
 
-            </div>
+                        </div>
 
-            <div className="col-md-3">
+                    </div>
 
-                <div className="card shadow p-3">
+                ))
 
-                    <h5>Blocked URLs</h5>
-
-                    <h2>{stats.blockedUrls}</h2>
-
-                </div>
-
-            </div>
+            }
 
         </div>
 

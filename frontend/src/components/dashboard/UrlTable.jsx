@@ -1,38 +1,56 @@
-import { FaTrash, FaExternalLinkAlt } from "react-icons/fa";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { FaCopy, FaDownload, FaTrash, FaBan } from "react-icons/fa";
+import toast from "react-hot-toast";
 
-const UrlTable = ({ urls, deleteUrl }) => {
+const UrlsTable = ({ urls, blockUrl, deleteUrl }) => {
+
+    const downloadQR = (qrCode, shortCode) => {
+
+        const link = document.createElement("a");
+
+        link.href = qrCode;
+
+        link.download = `${shortCode}.png`;
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+    };
 
     return (
 
         <div className="card shadow">
 
-            <div className="card-header">
+            <div className="card-header bg-primary text-white">
 
-                <h4>My URLs</h4>
+                <h4 className="mb-0">All URLs</h4>
 
             </div>
 
             <div className="table-responsive">
 
-                <table className="table table-hover align-middle">
+                <table className="table table-hover align-middle mb-0">
 
-                    <thead>
+                    <thead className="table-light">
 
                         <tr>
 
                             <th>Original URL</th>
 
+                            <th>Owner</th>
+
                             <th>Short URL</th>
 
-                            <th>QR</th>
-
-                            <th>Category</th>
-
-                            <th>Status</th>
+                            <th>QR Code</th>
 
                             <th>Clicks</th>
 
-                            <th>Action</th>
+                            <th>Status</th>
+                            <th>AI Summary</th>
+                            <th width="220">Actions</th>
 
                         </tr>
 
@@ -49,14 +67,11 @@ const UrlTable = ({ urls, deleteUrl }) => {
                                 <tr>
 
                                     <td
-
                                         colSpan="7"
-
-                                        className="text-center"
-
+                                        className="text-center py-4"
                                     >
 
-                                        No URLs Yet
+                                        No URLs Found
 
                                     </td>
 
@@ -66,7 +81,7 @@ const UrlTable = ({ urls, deleteUrl }) => {
 
                             :
 
-                            urls.map(url => (
+                            urls.map((url) => (
 
                                 <tr key={url._id}>
 
@@ -82,69 +97,75 @@ const UrlTable = ({ urls, deleteUrl }) => {
 
                                     <td>
 
+                                        {url.user?.name || "Unknown"}
+
+                                    </td>
+
+                                    <td>
+
                                         <a
-
                                             href={url.shortUrl}
-
                                             target="_blank"
-
                                             rel="noreferrer"
-
                                         >
 
                                             {url.shortCode}
 
-                                            <FaExternalLinkAlt
-
-                                                className="ms-2"
-
-                                            />
-
                                         </a>
+
+                                        <CopyToClipboard
+                                            text={url.shortUrl}
+                                            onCopy={() =>
+                                                toast.success("Short URL Copied!")
+                                            }
+                                        >
+
+                                            <button
+                                                className="btn btn-outline-primary btn-sm ms-2"
+                                            >
+
+                                                <FaCopy />
+
+                                            </button>
+
+                                        </CopyToClipboard>
 
                                     </td>
 
                                     <td>
 
                                         <img
-
                                             src={url.qrCode}
-
-                                            width="70"
-
                                             alt="QR"
-
+                                            width="70"
+                                            className="rounded border"
                                         />
 
-                                    </td>
+                                        <br />
 
-                                    <td>
-
-                                        {url.category}
-
-                                    </td>
-
-                                    <td>
-
-                                        <span
-
-                                            className={`badge ${
-
-                                                url.phishingStatus === "Safe"
-
-                                                ?
-
-                                                "bg-success"
-
-                                                :
-
-                                                "bg-warning"
-
-                                            }`}
-
+                                        <button
+                                            className="btn btn-success btn-sm mt-2"
+                                            onClick={() =>
+                                                downloadQR(
+                                                    url.qrCode,
+                                                    url.shortCode
+                                                )
+                                            }
                                         >
 
-                                            {url.phishingStatus}
+                                            <FaDownload className="me-1" />
+
+                                            Download
+
+                                        </button>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span className="fw-bold">
+
+                                            {url.clicks}
 
                                         </span>
 
@@ -152,29 +173,100 @@ const UrlTable = ({ urls, deleteUrl }) => {
 
                                     <td>
 
-                                        {url.clicks}
+                                        {
+
+                                            url.isActive ?
+
+                                            (
+
+                                                <span className="badge bg-success">
+
+                                                   <span className="badge bg-success">
+
+Safe
+
+</span>
+
+                                                </span>
+
+                                            )
+
+                                            :
+
+                                            (
+
+                                                <span className="badge bg-danger">
+
+                                                    <span className="badge bg-danger">
+
+Blocked
+
+</span>
+
+                                                </span>
+
+                                            )
+
+                                        }
 
                                     </td>
 
                                     <td>
 
                                         <button
+                                            className={`btn btn-sm me-2 ${
+                                                url.isActive
+                                                    ? "btn-warning"
+                                                    : "btn-success"
+                                            }`}
+                                            onClick={() => blockUrl(url._id)}
+                                        >
 
-                                            className="btn btn-danger btn-sm"
+                                            <FaBan className="me-1" />
 
-                                            onClick={() =>
+                                            {
 
-                                                deleteUrl(url._id)
+                                                url.isActive
+
+                                                    ? "Block"
+
+                                                    : "Unblock"
 
                                             }
 
+                                        </button>
+
+                                        <button
+                                            className="btn btn-danger btn-sm"
+                                            onClick={() => deleteUrl(url._id)}
                                         >
 
-                                            <FaTrash />
+                                            <FaTrash className="me-1" />
+
+                                            Delete
 
                                         </button>
 
                                     </td>
+                                    <td>
+
+<button
+
+className="btn btn-info btn-sm"
+
+onClick={()=>{
+
+alert(url.summary)
+
+}}
+
+>
+
+View
+
+</button>
+
+</td>
 
                                 </tr>
 
@@ -194,4 +286,4 @@ const UrlTable = ({ urls, deleteUrl }) => {
 
 };
 
-export default UrlTable;
+export default UrlsTable;
