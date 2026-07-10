@@ -1,0 +1,62 @@
+body{
+
+    background:#0f172a;
+
+    color:white;
+
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.hero{
+
+    padding:120px 20px;
+
+    background:linear-gradient(135deg,#1e293b,#0f172a);
+
+}
+
+.hero h1{
+
+    font-size:60px;
+}
+
+.hero p{
+
+    max-width:700px;
+
+    margin:auto;
+
+    font-size:20px;
+}
+
+.feature-card{
+
+    background:#1e293b;
+
+    border-radius:15px;
+
+    padding:30px;
+
+    text-align:center;
+
+    transition:.3s;
+
+    height:100%;
+}
+
+.feature-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.35);
+
+}
+
+.icon{
+
+    font-size:50px;
+
+    color:#3b82f6;
+
+    margin-bottom:20px;
+}

@@ -33,7 +33,8 @@ export const AuthProvider = ({ children }) => {
             value={{
                 user,
                 login,
-                logout
+                logout,
+                isAdmin: user?.role === "admin"
             }}
         >
 
