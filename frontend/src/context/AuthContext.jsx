@@ -8,28 +8,33 @@ export const AuthProvider = ({ children }) => {
         JSON.parse(localStorage.getItem("user"))
     );
 
+    // Login
     const login = (token, userData) => {
 
         localStorage.setItem("token", token);
+
         localStorage.setItem(
             "user",
             JSON.stringify(userData)
         );
 
         setUser(userData);
+
     };
 
-   const logout = () => {
+    // Logout
+    const logout = () => {
 
-    localStorage.removeItem("token");
+        localStorage.removeItem("token");
 
-    localStorage.removeItem("user");
+        localStorage.removeItem("user");
 
-    setUser(null);
+        setUser(null);
 
-    window.location.href = "/login";
+        // Redirect to Landing Page
+        window.location.href = "/";
 
-};
+    };
 
     return (
 
@@ -49,7 +54,5 @@ export const AuthProvider = ({ children }) => {
     );
 
 };
-
-
 
 export const useAuth = () => useContext(AuthContext);

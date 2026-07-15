@@ -1,42 +1,51 @@
 import { useState } from "react";
-
-import { Link,useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+
+import {
+    FaUser,
+    FaEnvelope,
+    FaLock,
+    FaEye,
+    FaEyeSlash,
+    FaRobot,
+    FaShieldAlt,
+    FaChartLine
+} from "react-icons/fa";
 
 import API from "../api/axios";
 
-import "../styles/auth.css";
+const Register = () => {
 
-const Register=()=>{
+    const navigate = useNavigate();
 
-    const navigate=useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
-    const [form,setForm]=useState({
+    const [form, setForm] = useState({
 
-        name:"",
-        email:"",
-        password:""
+        name: "",
+        email: "",
+        password: ""
 
     });
 
-    const handleChange=(e)=>{
+    const handleChange = (e) => {
 
         setForm({
 
             ...form,
 
-            [e.target.name]:e.target.value
+            [e.target.name]: e.target.value
 
         });
 
     };
 
-    const handleSubmit=async(e)=>{
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        try{
+        try {
 
             await API.post(
 
@@ -56,7 +65,7 @@ const Register=()=>{
 
         }
 
-        catch(err){
+        catch (err) {
 
             toast.error(
 
@@ -70,79 +79,304 @@ const Register=()=>{
 
     };
 
-    return(
+    return (
 
-        <div className="auth-container">
+        <div
+            className="container-fluid"
+            style={{
+                minHeight: "100vh",
+                background: "#f8fafc"
+            }}
+        >
 
-            <div className="auth-card">
+            <div className="row min-vh-100">
 
-                <h2>Create Account</h2>
+                {/* Left Side */}
 
-                <form onSubmit={handleSubmit}>
+                <div
+                    className="col-lg-6 d-none d-lg-flex flex-column justify-content-center text-white p-5"
+                    style={{
+                        background:
+                            "linear-gradient(135deg,#2563eb,#1d4ed8)"
+                    }}
+                >
 
-                    <input
+                    <div
+                        style={{
+                            maxWidth: "500px",
+                            margin: "0 auto"
+                        }}
+                    >
 
-                        className="form-control"
+                        <FaRobot
+                            size={60}
+                            className="mb-4"
+                        />
 
-                        placeholder="Name"
+                        <h1 className="fw-bold mb-4">
 
-                        name="name"
+                            Smart AI URL Shortener
 
-                        value={form.name}
+                        </h1>
 
-                        onChange={handleChange}
+                        <p
+                            className="lead"
+                            style={{
+                                lineHeight: "35px"
+                            }}
+                        >
 
-                    />
+                            Join our AI-powered platform and
+                            shorten URLs securely with phishing
+                            detection, QR code generation and
+                            real-time analytics.
 
-                    <input
+                        </p>
 
-                        className="form-control"
+                        <div className="mt-5">
 
-                        placeholder="Email"
+                            <div className="d-flex align-items-center mb-4">
 
-                        name="email"
+                                <FaShieldAlt size={28} />
 
-                        value={form.email}
+                                <span className="ms-3">
 
-                        onChange={handleChange}
+                                    AI Security
 
-                    />
+                                </span>
 
-                    <input
+                            </div>
 
-                        className="form-control"
+                            <div className="d-flex align-items-center">
 
-                        placeholder="Password"
+                                <FaChartLine size={28} />
 
-                        type="password"
+                                <span className="ms-3">
 
-                        name="password"
+                                    Smart Analytics
 
-                        value={form.password}
+                                </span>
 
-                        onChange={handleChange}
+                            </div>
 
-                    />
+                        </div>
 
-                    <button className="btn btn-primary">
+                    </div>
 
-                        Register
+                </div>
 
-                    </button>
+                {/* Right Side */}
 
-                </form>
+                <div className="col-lg-6 d-flex align-items-center justify-content-center">
 
-                <p className="text-center mt-3">
+                    <div
+                        className="card border-0 shadow-lg"
+                        style={{
+                            width: "450px",
+                            borderRadius: "20px"
+                        }}
+                    >
 
-                    Already have an account?
+                        <div className="card-body p-5">
 
-                    <Link to="/login">
+                            <h2 className="fw-bold text-center mb-2">
 
-                        Login
+                                Create Account
 
-                    </Link>
+                            </h2>
 
-                </p>
+                            <p className="text-center text-muted mb-4">
+
+                                Start your AI URL management journey
+
+                            </p>
+
+                            <form onSubmit={handleSubmit}>
+
+                                {/* Name */}
+
+                                <div className="mb-3">
+
+                                    <label className="form-label">
+
+                                        Full Name
+
+                                    </label>
+
+                                    <div className="input-group">
+
+                                        <span className="input-group-text">
+
+                                            <FaUser />
+
+                                        </span>
+
+                                        <input
+
+                                            type="text"
+
+                                            name="name"
+
+                                            className="form-control"
+
+                                            placeholder="Enter your full name"
+
+                                            value={form.name}
+
+                                            onChange={handleChange}
+
+                                            required
+
+                                        />
+
+                                    </div>
+
+                                </div>
+
+                                {/* Email */}
+
+                                <div className="mb-3">
+
+                                    <label className="form-label">
+
+                                        Email
+
+                                    </label>
+
+                                    <div className="input-group">
+
+                                        <span className="input-group-text">
+
+                                            <FaEnvelope />
+
+                                        </span>
+
+                                        <input
+
+                                            type="email"
+
+                                            name="email"
+
+                                            className="form-control"
+
+                                            placeholder="Enter your email"
+
+                                            value={form.email}
+
+                                            onChange={handleChange}
+
+                                            required
+
+                                        />
+
+                                    </div>
+
+                                </div>
+
+                                {/* Password */}
+
+                                <div className="mb-4">
+
+                                    <label className="form-label">
+
+                                        Password
+
+                                    </label>
+
+                                    <div className="input-group">
+
+                                        <span className="input-group-text">
+
+                                            <FaLock />
+
+                                        </span>
+
+                                        <input
+
+                                            type={
+                                                showPassword
+                                                    ? "text"
+                                                    : "password"
+                                            }
+
+                                            name="password"
+
+                                            className="form-control"
+
+                                            placeholder="Create password"
+
+                                            value={form.password}
+
+                                            onChange={handleChange}
+
+                                            required
+
+                                        />
+
+                                        <button
+
+                                            type="button"
+
+                                            className="btn btn-outline-secondary"
+
+                                            onClick={() =>
+                                                setShowPassword(
+                                                    !showPassword
+                                                )
+                                            }
+
+                                        >
+
+                                            {
+
+                                                showPassword
+
+                                                    ?
+
+                                                    <FaEyeSlash />
+
+                                                    :
+
+                                                    <FaEye />
+
+                                            }
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                <button
+                                    className="btn btn-primary w-100 py-2"
+                                >
+
+                                    Create Account
+
+                                </button>
+
+                            </form>
+
+                            <p className="text-center mt-4 mb-0">
+
+                                Already have an account?
+
+                                <Link
+                                    to="/login"
+                                    className="ms-2 text-decoration-none fw-bold"
+                                >
+
+                                    Login
+
+                                </Link>
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 

@@ -217,7 +217,12 @@ const Dashboard = () => {
 
                 <Navbar />
 
-                <div className="container py-4">
+                <div
+    className="container-fluid py-4 px-4"
+    style={{
+        maxWidth: "1500px"
+    }}
+>
 
                     <DashboardStats stats={stats} />
 
@@ -225,61 +230,87 @@ const Dashboard = () => {
 
                     {/* Search + Filter */}
 
-                    <div className="card shadow mb-4">
+                    <div
+    className="shadow-sm mb-4"
+    style={{
+        background: "#fff",
+        borderRadius: "18px"
+    }}
+>
 
-                        <div className="card-body">
+    <div className="p-4">
 
-                            <div className="row">
+        <div className="d-flex justify-content-between align-items-center mb-3">
 
-                                <div className="col-md-8">
+            <div>
 
-                                    <input
-                                        className="form-control"
-                                        placeholder="Search Original URL or Short Code..."
-                                        value={search}
-                                        onChange={(e) => {
+                <h4 className="fw-bold mb-1">
+                    My Smart URLs
+                </h4>
 
-                                            setSearch(e.target.value);
+                <small className="text-muted">
+                    Search and manage your AI-generated URLs
+                </small>
 
-                                            setCurrentPage(1);
+            </div>
 
-                                        }}
-                                    />
+        </div>
 
-                                </div>
+        <div className="row g-3">
 
-                                <div className="col-md-4">
+            <div className="col-md-8">
 
-                                    <select
-                                        className="form-select"
-                                        value={statusFilter}
-                                        onChange={(e) => {
+                <input
+                    className="form-control"
+                    style={{
+                        height: "48px",
+                        borderRadius: "12px"
+                    }}
+                    placeholder="🔍 Search Original URL or Short URL..."
+                    value={search}
+                    onChange={(e) => {
 
-                                            setStatusFilter(e.target.value);
+                        setSearch(e.target.value);
 
-                                            setCurrentPage(1);
+                        setCurrentPage(1);
 
-                                        }}
-                                    >
+                    }}
+                />
 
-                                        <option>All</option>
+            </div>
 
-                                        <option>Safe</option>
+            <div className="col-md-4">
 
-                                        <option>Unknown</option>
+                <select
+                    className="form-select"
+                    style={{
+                        height: "48px",
+                        borderRadius: "12px"
+                    }}
+                    value={statusFilter}
+                    onChange={(e) => {
 
-                                        <option>Malicious</option>
+                        setStatusFilter(e.target.value);
 
-                                    </select>
+                        setCurrentPage(1);
 
-                                </div>
+                    }}
+                >
 
-                            </div>
+                    <option>All</option>
+                    <option>Safe</option>
+                    <option>Unknown</option>
+                    <option>Malicious</option>
 
-                        </div>
+                </select>
 
-                    </div>
+            </div>
 
+        </div>
+
+    </div>
+
+</div>
                     {/* URL Table */}
 
                     <UrlTable

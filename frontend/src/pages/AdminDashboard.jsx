@@ -197,7 +197,7 @@ const AdminDashboard = () => {
         return <Loader />;
 
     }
-console.log("AdminDashboard blockUrl:", blockUrl);
+
     return (
 
         <div className="d-flex">
@@ -217,11 +217,21 @@ console.log("AdminDashboard blockUrl:", blockUrl);
 
                 <div className="container py-4">
 
-                    <h2 className="mb-4">
+                    <div className="d-flex justify-content-between align-items-center mb-4">
 
-                        Admin Dashboard
+    <div>
 
-                    </h2>
+        <h2 className="fw-bold mb-1" style={{ color: "#1e293b" }}>
+            👑 Admin Dashboard
+        </h2>
+
+        <p className="text-muted mb-0">
+            Monitor users, manage URLs and maintain platform security.
+        </p>
+
+    </div>
+
+</div>
 
                     <AdminStats
                         dashboard={dashboard}

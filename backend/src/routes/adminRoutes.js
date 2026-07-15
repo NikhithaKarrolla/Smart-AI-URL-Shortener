@@ -5,8 +5,7 @@ const router = express.Router();
 const auth = require("../middleware/authMiddleware");
 const admin = require("../middleware/adminMiddleware");
 
-console.log("Auth:", auth);
-console.log("Admin:", admin);
+
 
 const controller = require("../controllers/adminController");
 

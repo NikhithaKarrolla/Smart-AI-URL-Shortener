@@ -4,7 +4,7 @@ const router = express.Router();
 
 const controller = require("../controllers/urlController");
 
-console.log("URL Controller:", controller);
+
 
 const auth = require("../middleware/authMiddleware");
 

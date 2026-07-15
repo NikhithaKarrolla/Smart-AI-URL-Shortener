@@ -1,86 +1,214 @@
 import {
-  FaShieldAlt,
-  FaQrcode,
-  FaChartLine,
-  FaRobot
+    FaShieldAlt,
+    FaQrcode,
+    FaChartLine,
+    FaRobot,
+    FaLink,
+    FaUserShield,
+    FaCopy,
+    FaGlobe,
+    FaLock,
+    FaChartPie
 } from "react-icons/fa";
 
 const Features = () => {
-  return (
 
-    <section className="container py-5">
+    const features = [
 
-      <div className="row g-4">
+        {
+            icon: <FaShieldAlt size={45} className="text-success" />,
+            title: "AI Phishing Detection",
+            description:
+                "Detect malicious and suspicious URLs before shortening them using AI-powered security."
+        },
 
-        <div className="col-md-3">
+        {
+            icon: <FaRobot size={45} className="text-primary" />,
+            title: "AI Webpage Summary",
+            description:
+                "Automatically generate concise webpage summaries before visiting a website."
+        },
 
-          <div className="feature-card">
+        {
+            icon: <FaLink size={45} className="text-info" />,
+            title: "Custom URL Shortening",
+            description:
+                "Create branded short links with custom aliases for easy sharing."
+        },
 
-            <FaShieldAlt className="icon" />
+        {
+            icon: <FaQrcode size={45} className="text-danger" />,
+            title: "QR Code Generator",
+            description:
+                "Generate and download QR codes instantly for every shortened URL."
+        },
 
-            <h4>AI Security</h4>
+        {
+            icon: <FaChartLine size={45} className="text-warning" />,
+            title: "Real-Time Analytics",
+            description:
+                "Track clicks, browser, country, device and referrer statistics in real time."
+        },
 
-            <p>
-              Detect phishing links before shortening.
-            </p>
+        {
+            icon: <FaChartPie size={45} className="text-secondary" />,
+            title: "Interactive Dashboard",
+            description:
+                "Visual dashboards with charts, statistics and complete URL management."
+        },
 
-          </div>
+        {
+            icon: <FaUserShield size={45} className="text-dark" />,
+            title: "Admin Dashboard",
+            description:
+                "Manage users, block/unblock URLs, monitor security and control the platform."
+        },
 
-        </div>
+        {
+            icon: <FaLock size={45} className="text-success" />,
+            title: "Secure Authentication",
+            description:
+                "JWT-based authentication with protected routes and role-based authorization."
+        },
 
-        <div className="col-md-3">
+        {
+            icon: <FaCopy size={45} className="text-primary" />,
+            title: "One Click Copy",
+            description:
+                "Copy shortened URLs instantly with a single click for quick sharing."
+        },
 
-          <div className="feature-card">
+        {
+            icon: <FaGlobe size={45} className="text-info" />,
+            title: "Global URL Monitoring",
+            description:
+                "Monitor traffic from different countries, browsers and devices worldwide."
+        }
 
-            <FaRobot className="icon" />
+    ];
 
-            <h4>AI Summary</h4>
+    return (
 
-            <p>
-              Automatically summarize webpages.
-            </p>
+        <section
+            id="features"
+            className="py-5"
+            style={{
+                background: "#f8fafc"
+            }}
+        >
 
-          </div>
+            <div className="container">
 
-        </div>
+                <div className="text-center mb-5">
 
-        <div className="col-md-3">
+                    <h2
+                        className="fw-bold"
+                        style={{
+                            color: "#1e293b"
+                        }}
+                    >
 
-          <div className="feature-card">
+                        Powerful Features
 
-            <FaQrcode className="icon" />
+                    </h2>
 
-            <h4>QR Code</h4>
+                    <p
+                        className="text-muted fs-5"
+                        style={{
+                            maxWidth: "750px",
+                            margin: "auto"
+                        }}
+                    >
 
-            <p>
-              Instantly generate QR codes.
-            </p>
+                        Everything you need to securely shorten URLs,
+                        analyze traffic, detect phishing attempts,
+                        generate QR codes and manage links using AI.
 
-          </div>
+                    </p>
 
-        </div>
+                </div>
 
-        <div className="col-md-3">
+                <div className="row g-4">
 
-          <div className="feature-card">
+                    {
 
-            <FaChartLine className="icon" />
+                        features.map((feature, index) => (
 
-            <h4>Analytics</h4>
+                            <div
+                                className="col-lg-4 col-md-6"
+                                key={index}
+                            >
 
-            <p>
-              Browser, device and click analytics.
-            </p>
+                                <div
+                                    className="card border-0 shadow-sm h-100"
+                                    style={{
+                                        borderRadius: "18px",
+                                        transition: "0.3s",
+                                        cursor: "pointer"
+                                    }}
+                                    onMouseEnter={(e) => {
 
-          </div>
+                                        e.currentTarget.style.transform =
+                                            "translateY(-8px)";
 
-        </div>
+                                        e.currentTarget.style.boxShadow =
+                                            "0 20px 40px rgba(0,0,0,.12)";
 
-      </div>
+                                    }}
+                                    onMouseLeave={(e) => {
 
-    </section>
+                                        e.currentTarget.style.transform =
+                                            "translateY(0px)";
 
-  );
+                                        e.currentTarget.style.boxShadow =
+                                            "0 10px 20px rgba(0,0,0,.08)";
+
+                                    }}
+                                >
+
+                                    <div className="card-body text-center p-5">
+
+                                        <div className="mb-4">
+
+                                            {feature.icon}
+
+                                        </div>
+
+                                        <h4 className="fw-bold mb-3">
+
+                                            {feature.title}
+
+                                        </h4>
+
+                                        <p
+                                            className="text-muted"
+                                            style={{
+                                                lineHeight: "28px"
+                                            }}
+                                        >
+
+                                            {feature.description}
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        ))
+
+                    }
+
+                </div>
+
+            </div>
+
+        </section>
+
+    );
+
 };
 
 export default Features;

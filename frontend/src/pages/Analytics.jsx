@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import {
+    FaChartLine,
+    FaLink,
+    FaMousePointer,
+    FaGlobe
+} from "react-icons/fa";
 
 import API from "../api/axios";
 
@@ -41,8 +47,19 @@ const Analytics = () => {
 
     }, []);
 
-    if (!data)
-        return <h2 className="text-center mt-5">Loading...</h2>;
+    if (!data) {
+
+        return (
+
+            <h2 className="text-center mt-5">
+
+                Loading Analytics...
+
+            </h2>
+
+        );
+
+    }
 
     return (
 
@@ -61,61 +78,139 @@ const Analytics = () => {
 
                 <Navbar />
 
-                <div className="container py-4">
+                <div
+                    className="container-fluid py-4 px-4"
+                    style={{
+                        maxWidth: "1500px"
+                    }}
+                >
 
-                    <h2 className="mb-4">
+                    {/* Page Heading */}
 
-                        Analytics Dashboard
+                    <div className="mb-4">
 
-                    </h2>
+                        <h2
+                            className="fw-bold"
+                            style={{
+                                color: "#1e293b"
+                            }}
+                        >
+
+                            <FaChartLine className="me-2" />
+
+                            Analytics Dashboard
+
+                        </h2>
+
+                        <p className="text-muted mb-0">
+
+                            View detailed analytics and monitor your shortened URLs.
+
+                        </p>
+
+                    </div>
 
                     {/* Summary Cards */}
 
-                    <div className="row mb-5">
+                    <div className="row g-4 mb-5">
 
-                        <div className="col-md-4">
+                        <div className="col-lg-4">
 
-                            <div className="card shadow text-center p-4">
+                            <div
+                                className="text-white shadow-lg"
+                                style={{
+                                    background:
+                                        "linear-gradient(135deg,#2563eb,#1d4ed8)",
+                                    borderRadius: "18px",
+                                    padding: "25px"
+                                }}
+                            >
 
-                                <h5>Total URLs</h5>
+                                <div className="d-flex justify-content-between align-items-center">
 
-                                <h2>
+                                    <div>
 
-                                    {data.summary.totalUrls}
+                                        <small>Total URLs</small>
 
-                                </h2>
+                                        <h2 className="fw-bold mt-2">
+
+                                            {data.summary.totalUrls}
+
+                                        </h2>
+
+                                    </div>
+
+                                    <FaLink size={34} />
+
+                                </div>
 
                             </div>
 
                         </div>
 
-                        <div className="col-md-4">
+                        <div className="col-lg-4">
 
-                            <div className="card shadow text-center p-4">
+                            <div
+                                className="text-white shadow-lg"
+                                style={{
+                                    background:
+                                        "linear-gradient(135deg,#16a34a,#15803d)",
+                                    borderRadius: "18px",
+                                    padding: "25px"
+                                }}
+                            >
 
-                                <h5>Total Clicks</h5>
+                                <div className="d-flex justify-content-between align-items-center">
 
-                                <h2>
+                                    <div>
 
-                                    {data.summary.totalClicks}
+                                        <small>Total Clicks</small>
 
-                                </h2>
+                                        <h2 className="fw-bold mt-2">
+
+                                            {data.summary.totalClicks}
+
+                                        </h2>
+
+                                    </div>
+
+                                    <FaMousePointer size={34} />
+
+                                </div>
 
                             </div>
 
                         </div>
 
-                        <div className="col-md-4">
+                        <div className="col-lg-4">
 
-                            <div className="card shadow text-center p-4">
+                            <div
+                                className="text-white shadow-lg"
+                                style={{
+                                    background:
+                                        "linear-gradient(135deg,#ea580c,#c2410c)",
+                                    borderRadius: "18px",
+                                    padding: "25px"
+                                }}
+                            >
 
-                                <h5>Analytics Records</h5>
+                                <div className="d-flex justify-content-between align-items-center">
 
-                                <h2>
+                                    <div>
 
-                                    {data.summary.totalAnalyticsRecords}
+                                        <small>Analytics Records</small>
 
-                                </h2>
+                                        <h2 className="fw-bold mt-2">
+
+                                            {data.summary.totalAnalyticsRecords}
+
+                                        </h2>
+
+                                    </div>
+
+                                    <FaGlobe size={34} />
+
+                                </div>
 
                             </div>
 
@@ -129,41 +224,109 @@ const Analytics = () => {
 
                         <div className="col-lg-6">
 
-                            <BrowserChart
+                            <div
+                                className="card shadow-sm border-0"
+                                style={{
+                                    borderRadius: "18px"
+                                }}
+                            >
 
-                                browsers={data.browsers}
+                                <div className="card-body">
 
-                            />
+                                    <h5 className="fw-bold mb-3">
 
-                        </div>
+                                        🌐 Browser Usage
 
-                        <div className="col-lg-6">
+                                    </h5>
 
-                            <DeviceChart
+                                    <BrowserChart
+                                        browsers={data.browsers}
+                                    />
 
-                                devices={data.devices}
+                                </div>
 
-                            />
-
-                        </div>
-
-                        <div className="col-lg-6">
-
-                            <CountryChart
-
-                                countries={data.countries}
-
-                            />
+                            </div>
 
                         </div>
 
                         <div className="col-lg-6">
 
-                            <ReferrerChart
+                            <div
+                                className="card shadow-sm border-0"
+                                style={{
+                                    borderRadius: "18px"
+                                }}
+                            >
 
-                                referrers={data.referrers}
+                                <div className="card-body">
 
-                            />
+                                    <h5 className="fw-bold mb-3">
+
+                                        💻 Device Usage
+
+                                    </h5>
+
+                                    <DeviceChart
+                                        devices={data.devices}
+                                    />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div className="col-lg-6">
+
+                            <div
+                                className="card shadow-sm border-0"
+                                style={{
+                                    borderRadius: "18px"
+                                }}
+                            >
+
+                                <div className="card-body">
+
+                                    <h5 className="fw-bold mb-3">
+
+                                        🌍 Country Analytics
+
+                                    </h5>
+
+                                    <CountryChart
+                                        countries={data.countries}
+                                    />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div className="col-lg-6">
+
+                            <div
+                                className="card shadow-sm border-0"
+                                style={{
+                                    borderRadius: "18px"
+                                }}
+                            >
+
+                                <div className="card-body">
+
+                                    <h5 className="fw-bold mb-3">
+
+                                        🔗 Referrer Sources
+
+                                    </h5>
+
+                                    <ReferrerChart
+                                        referrers={data.referrers}
+                                    />
+
+                                </div>
+
+                            </div>
 
                         </div>
 

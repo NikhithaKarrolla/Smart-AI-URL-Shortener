@@ -1,3 +1,13 @@
+import {
+    
+    FaEnvelope,
+    FaShieldAlt,
+    FaIdBadge,
+    FaCalendarAlt,
+    FaCheckCircle,
+    FaSignOutAlt
+} from "react-icons/fa";
+
 import Sidebar from "../components/layout/Sidebar";
 import Navbar from "../components/layout/Navbar";
 import { useAuth } from "../context/AuthContext";
@@ -23,71 +33,165 @@ const Profile = () => {
 
                 <Navbar />
 
-                <div className="container py-5">
+                <div
+                    className="container-fluid py-4 px-4"
+                    style={{
+                        maxWidth: "1200px"
+                    }}
+                >
 
-                    <div className="row justify-content-center">
+                    {/* Heading */}
 
-                        <div className="col-lg-8">
+                    <div className="mb-4">
 
-                            <div className="card shadow border-0">
+                        <h2
+                            className="fw-bold"
+                            style={{
+                                color: "#1e293b"
+                            }}
+                        >
 
-                                <div className="card-body p-5">
+                            👤 My Profile
 
-                                    <div className="text-center">
+                        </h2>
 
-                                        <img
+                        <p className="text-muted">
 
-                                            src={`https://ui-avatars.com/api/?name=${user?.name}&background=2563eb&color=fff&size=150`}
+                            Manage your account information.
 
-                                            className="rounded-circle shadow"
+                        </p>
 
-                                            alt="avatar"
+                    </div>
 
-                                        />
+                    <div className="card shadow-lg border-0">
 
-                                        <h2 className="mt-4">
+                        {/* Top Section */}
 
-                                            {user?.name}
+                        <div
+                            className="text-center text-white p-5"
+                            style={{
+                                background:
+                                    "linear-gradient(135deg,#2563eb,#1d4ed8)"
+                            }}
+                        >
 
-                                        </h2>
+                            <img
+                                src={`https://ui-avatars.com/api/?name=${user?.name}&background=ffffff&color=2563eb&size=180`}
+                                alt="avatar"
+                                className="rounded-circle shadow mb-3"
+                            />
 
-                                        <span className="badge bg-primary">
+                            <h2 className="fw-bold">
 
-                                            {user?.role?.toUpperCase()}
+                                {user?.name}
 
-                                        </span>
+                            </h2>
 
-                                    </div>
+                            <span
+                                className={`badge px-4 py-2 fs-6 ${
+                                    user?.role === "admin"
+                                        ? "bg-warning text-dark"
+                                        : "bg-light text-dark"
+                                }`}
+                            >
 
-                                    <hr className="my-4"/>
+                                {user?.role?.toUpperCase()}
 
-                                    <div className="row">
+                            </span>
 
-                                        <div className="col-md-6">
+                        </div>
+
+                        {/* Details */}
+
+                        <div className="card-body p-5">
+
+                            <div className="row g-4">
+
+                                <div className="col-md-6">
+
+                                    <div className="card border-0 shadow-sm h-100">
+
+                                        <div className="card-body">
+
+                                            <FaEnvelope
+                                                size={22}
+                                                className="text-primary mb-2"
+                                            />
 
                                             <h6>Email</h6>
 
-                                            <p>{user?.email}</p>
+                                            <p className="mb-0">
+
+                                                {user?.email}
+
+                                            </p>
 
                                         </div>
 
-                                        <div className="col-md-6">
+                                    </div>
+
+                                </div>
+
+                                <div className="col-md-6">
+
+                                    <div className="card border-0 shadow-sm h-100">
+
+                                        <div className="card-body">
+
+                                            <FaShieldAlt
+                                                size={22}
+                                                className="text-success mb-2"
+                                            />
 
                                             <h6>Role</h6>
 
-                                            <p>{user?.role}</p>
+                                            <p className="mb-0">
+
+                                                {user?.role}
+
+                                            </p>
 
                                         </div>
 
-                                        <div className="col-md-6">
+                                    </div>
+
+                                </div>
+
+                                <div className="col-md-6">
+
+                                    <div className="card border-0 shadow-sm h-100">
+
+                                        <div className="card-body">
+
+                                            <FaIdBadge
+                                                size={22}
+                                                className="text-warning mb-2"
+                                            />
 
                                             <h6>Account ID</h6>
 
-                                            <p>{user?._id}</p>
+                                            <small>
+
+                                                {user?._id}
+
+                                            </small>
 
                                         </div>
 
-                                        <div className="col-md-6">
+                                    </div>
+
+                                </div>
+
+                                <div className="col-md-6">
+
+                                    <div className="card border-0 shadow-sm h-100">
+
+                                        <div className="card-body">
+
+                                            <FaCalendarAlt
+                                                size={22}
+                                                className="text-danger mb-2"
+                                            />
 
                                             <h6>Member Since</h6>
 
@@ -97,13 +201,15 @@ const Profile = () => {
 
                                                     user?.createdAt
 
-                                                    ?
+                                                        ?
 
-                                                    new Date(user.createdAt).toLocaleDateString()
+                                                        new Date(
+                                                            user.createdAt
+                                                        ).toLocaleDateString()
 
-                                                    :
+                                                        :
 
-                                                    "N/A"
+                                                        "N/A"
 
                                                 }
 
@@ -113,21 +219,53 @@ const Profile = () => {
 
                                     </div>
 
-                                    <button
+                                </div>
 
-                                        className="btn btn-danger w-100 mt-4"
+                                <div className="col-md-12">
 
-                                        onClick={logout}
+                                    <div className="card border-0 shadow-sm">
 
-                                    >
+                                        <div className="card-body d-flex align-items-center">
 
-                                        Logout
+                                            <FaCheckCircle
+                                                size={25}
+                                                className="text-success me-3"
+                                            />
 
-                                    </button>
+                                            <div>
+
+                                                <h6 className="mb-1">
+
+                                                    Account Status
+
+                                                </h6>
+
+                                                <span className="badge bg-success">
+
+                                                    Active
+
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
 
                                 </div>
 
                             </div>
+
+                            <button
+                                className="btn btn-danger btn-lg w-100 mt-5"
+                                onClick={logout}
+                            >
+
+                                <FaSignOutAlt className="me-2" />
+
+                                Logout
+
+                            </button>
 
                         </div>
 
