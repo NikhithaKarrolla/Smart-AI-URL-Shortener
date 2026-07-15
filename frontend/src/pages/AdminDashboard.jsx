@@ -9,7 +9,7 @@ import Navbar from "../components/layout/Navbar";
 import AdminStats from "../components/admin/AdminStats";
 import UsersTable from "../components/admin/UsersTable";
 import UrlsTable from "../components/admin/UrlsTable";
-
+    
 import Loader from "../components/common/Loader";
 
 const AdminDashboard = () => {
@@ -22,29 +22,38 @@ const AdminDashboard = () => {
     });
 
     const [users, setUsers] = useState([]);
-
     const [urls, setUrls] = useState([]);
 
     const [loading, setLoading] = useState(true);
 
-    const loadData = async () => {
+    const [userSearch, setUserSearch] = useState("");
+    const [urlSearch, setUrlSearch] = useState("");
+
+    // ===========================
+    // Load Dashboard
+    // ===========================
+
+    const loadDashboard = async () => {
 
         try {
 
-            const dashboardRes =
-                await API.get("/admin/dashboard");
+            setLoading(true);
 
-            const usersRes =
-                await API.get("/admin/users");
+            const dashboardRes = await API.get("/admin/dashboard");
+            const usersRes = await API.get("/admin/users");
+            const urlsRes = await API.get("/admin/urls");
 
-            const urlsRes =
-                await API.get("/admin/urls");
+            setDashboard(
+                dashboardRes.data.dashboard
+            );
 
-            setDashboard(dashboardRes.data.dashboard);
+            setUsers(
+                usersRes.data.users
+            );
 
-            setUsers(usersRes.data.users);
-
-            setUrls(urlsRes.data.urls);
+            setUrls(
+                urlsRes.data.urls
+            );
 
         }
 
@@ -52,7 +61,7 @@ const AdminDashboard = () => {
 
             console.log(err);
 
-            toast.error("Unable to load admin dashboard.");
+            toast.error("Failed to load Admin Dashboard");
 
         }
 
@@ -66,9 +75,13 @@ const AdminDashboard = () => {
 
     useEffect(() => {
 
-        loadData();
+        loadDashboard();
 
     }, []);
+
+    // ===========================
+    // Change User Role
+    // ===========================
 
     const changeRole = async (id) => {
 
@@ -78,17 +91,23 @@ const AdminDashboard = () => {
 
             toast.success("Role Updated");
 
-            loadData();
+            loadDashboard();
 
         }
 
-        catch {
+        catch (err) {
 
-            toast.error("Failed");
+            console.log(err);
+
+            toast.error("Unable to update role");
 
         }
 
     };
+
+    // ===========================
+    // Block / Unblock URL
+    // ===========================
 
     const blockUrl = async (id) => {
 
@@ -96,19 +115,25 @@ const AdminDashboard = () => {
 
             await API.patch(`/admin/block/${id}`);
 
-            toast.success("Status Updated");
+            toast.success("URL Status Updated");
 
-            loadData();
+            loadDashboard();
 
         }
 
-        catch {
+        catch (err) {
 
-            toast.error("Failed");
+            console.log(err);
+
+            toast.error("Operation Failed");
 
         }
 
     };
+
+    // ===========================
+    // Delete URL
+    // ===========================
 
     const deleteUrl = async (id) => {
 
@@ -121,11 +146,13 @@ const AdminDashboard = () => {
 
             toast.success("URL Deleted");
 
-            loadData();
+            loadDashboard();
 
         }
 
-        catch {
+        catch (err) {
+
+            console.log(err);
 
             toast.error("Delete Failed");
 
@@ -133,9 +160,44 @@ const AdminDashboard = () => {
 
     };
 
-    if (loading)
+    // ===========================
+    // Search Filters
+    // ===========================
+
+    const filteredUsers = users.filter(user =>
+
+        user.name
+            .toLowerCase()
+            .includes(userSearch.toLowerCase())
+
+        ||
+
+        user.email
+            .toLowerCase()
+            .includes(userSearch.toLowerCase())
+
+    );
+
+    const filteredUrls = urls.filter(url =>
+
+        url.originalUrl
+            .toLowerCase()
+            .includes(urlSearch.toLowerCase())
+
+        ||
+
+        url.shortCode
+            .toLowerCase()
+            .includes(urlSearch.toLowerCase())
+
+    );
+
+    if (loading) {
+
         return <Loader />;
 
+    }
+console.log("AdminDashboard blockUrl:", blockUrl);
     return (
 
         <div className="d-flex">
@@ -165,16 +227,74 @@ const AdminDashboard = () => {
                         dashboard={dashboard}
                     />
 
-                    <UsersTable
-                        users={users}
-                        changeRole={changeRole}
-                    />
+                    {/* Users */}
 
-                    <UrlsTable
-                        urls={urls}
-                        blockUrl={blockUrl}
-                        deleteUrl={deleteUrl}
-                    />
+                    <div className="card shadow mb-4">
+
+                        <div className="card-header bg-primary text-white">
+
+                            <h5 className="mb-0">
+
+                                Users
+
+                            </h5>
+
+                        </div>
+
+                        <div className="card-body">
+
+                            <input
+                                className="form-control mb-3"
+                                placeholder="Search Users..."
+                                value={userSearch}
+                                onChange={(e)=>
+                                    setUserSearch(e.target.value)
+                                }
+                            />
+
+                            <UsersTable
+                                users={filteredUsers}
+                                changeRole={changeRole}
+                            />
+
+                        </div>
+
+                    </div>
+
+                    {/* URLs */}
+
+                    <div className="card shadow">
+
+                        <div className="card-header bg-success text-white">
+
+                            <h5 className="mb-0">
+
+                                URL Management
+
+                            </h5>
+
+                        </div>
+
+                        <div className="card-body">
+
+                            <input
+                                className="form-control mb-3"
+                                placeholder="Search URLs..."
+                                value={urlSearch}
+                                onChange={(e)=>
+                                    setUrlSearch(e.target.value)
+                                }
+                            />
+
+                            <UrlsTable
+                                urls={filteredUrls}
+                                blockUrl={blockUrl}
+                                deleteUrl={deleteUrl}
+                            />
+
+                        </div>
+
+                    </div>
 
                 </div>
 

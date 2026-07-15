@@ -1,56 +1,80 @@
+import {
+    FaUsers,
+    FaLink,
+    FaMousePointer,
+    FaShieldAlt
+} from "react-icons/fa";
+
 const AdminStats = ({ dashboard }) => {
+
+    const cards = [
+
+        {
+            title: "Users",
+            value: dashboard.totalUsers,
+            color: "primary",
+            icon: <FaUsers size={28} />
+        },
+
+        {
+            title: "URLs",
+            value: dashboard.totalUrls,
+            color: "success",
+            icon: <FaLink size={28} />
+        },
+
+        {
+            title: "Clicks",
+            value: dashboard.totalClicks,
+            color: "warning",
+            icon: <FaMousePointer size={28} />
+        },
+
+        {
+            title: "Safe URLs",
+            value: dashboard.safeUrls,
+            color: "info",
+            icon: <FaShieldAlt size={28} />
+        }
+
+    ];
 
     return (
 
         <div className="row mb-4">
 
-            <div className="col-md-3">
+            {
 
-                <div className="card shadow text-center p-3">
+                cards.map(card => (
 
-                    <h5>Users</h5>
+                    <div
+                        className="col-lg-3 col-md-6 mb-3"
+                        key={card.title}
+                    >
 
-                    <h2>{dashboard.totalUsers}</h2>
+                        <div className={`card bg-${card.color} text-white shadow border-0`}>
 
-                </div>
+                            <div className="card-body d-flex justify-content-between align-items-center">
 
-            </div>
+                                <div>
 
-            <div className="col-md-3">
+                                    <h6>{card.title}</h6>
 
-                <div className="card shadow text-center p-3">
+                                    <h2>{card.value}</h2>
 
-                    <h5>URLs</h5>
+                                </div>
 
-                    <h2>{dashboard.totalUrls}</h2>
+                                {card.icon}
 
-                </div>
+                            </div>
 
-            </div>
+                        </div>
 
-            <div className="col-md-3">
+                    </div>
 
-                <div className="card shadow text-center p-3">
+                ))
 
-                    <h5>Clicks</h5>
-
-                    <h2>{dashboard.totalClicks}</h2>
-
-                </div>
-
-            </div>
-
-            <div className="col-md-3">
-
-                <div className="card shadow text-center p-3">
-
-                    <h5>Safe URLs</h5>
-
-                    <h2>{dashboard.safeUrls}</h2>
-
-                </div>
-
-            </div>
+            }
 
         </div>
 

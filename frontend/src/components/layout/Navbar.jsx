@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
 
     <div
-      className="bg-white shadow p-3 mb-4 d-flex justify-content-between align-items-center"
+      className="bg-black shadow p-3 mb-4 d-flex justify-content-between align-items-center"
     >
 
       <h4>
@@ -18,7 +18,7 @@ const Navbar = () => {
 
         {user?.name}
 
-        👋
+        👋 
 
       </h4>
 

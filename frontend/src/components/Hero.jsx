@@ -15,11 +15,11 @@ const Hero = () => {
           QR codes, intelligent classification and real-time analytics.
         </p>
 
-        <Link to="/register" className="btn btn-primary btn-lg me-3">
+        <Link to="/register" className="btn btn-primary btn-lg me-3 w-25">
           Get Started
         </Link>
 
-        <Link to="/login" className="btn btn-outline-light btn-lg">
+        <Link to="/login" className="btn btn-outline-light btn-lg w-25">
           Login
         </Link>
 
