@@ -58,12 +58,12 @@ An AI-powered full-stack URL shortening platform that creates secure short links
 ```
 Smart-AI-URL-Shortener
 │
-├── client/
+├── frontend/
 │   ├── src/
 │   ├── public/
 │   └── package.json
 │
-├── server/
+├── backend/
 │   ├── config/
 │   ├── controllers/
 │   ├── middleware/
@@ -84,7 +84,7 @@ Smart-AI-URL-Shortener
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/<your-username>/<repository-name>.git
+git clone https://github.com/NikhithaKarrolla/Smart-AI-URL-Shortener
 cd <repository-name>
 ```
 
@@ -179,23 +179,6 @@ Automatically categorizes URLs into relevant topics for better organization.
 
 ---
 
-## 📸 Screenshots
-
-Add screenshots here.
-
-```
-Landing Page
-
-Login
-
-Dashboard
-
-Analytics
-
-Admin Dashboard
-```
-
----
 
 ## 🔮 Future Enhancements
 
