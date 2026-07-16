@@ -80,7 +80,7 @@ Smart-AI-URL-Shortener
 ---
 ## System Architecture
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/2752e9ca-af1e-43c0-8920-136fb3cda0bb" />
----
+
 ## Workflow Diagram
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/995a7b75-b761-4274-a7be-f08529160252" />
 
